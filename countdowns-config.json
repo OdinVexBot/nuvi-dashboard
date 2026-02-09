@@ -1,0 +1,22 @@
+{
+  "rules": [
+    {
+      "key": "mexico",
+      "kind": "subjectContains",
+      "match": "Mexico Vacation",
+      "label": "Mexico Trip"
+    },
+    {
+      "key": "anniversary",
+      "kind": "anniversary",
+      "label": "Wedding Anniversary",
+      "baseDate": "1995-05-27"
+    },
+    {
+      "key": "grad",
+      "kind": "subjectContains",
+      "match": "Sammamish High School Graduation — Class of 2026",
+      "label": "Ruby Graduation"
+    }
+  ]
+}

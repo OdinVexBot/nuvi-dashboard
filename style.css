@@ -1,0 +1,238 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #101318;
+  color: #f2f4f8;
+}
+
+#app {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  padding: 6px 10px 6px;
+  gap: 6px;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 6px;
+}
+
+.today,
+.week {
+  background: #181c24;
+  border-radius: 10px;
+  padding: 6px 10px 6px;
+}
+
+.weather,
+.checklist {
+  background: #181c24;
+  border-radius: 10px;
+  padding: 12px 14px 10px;
+  min-height: 200px;
+}
+
+.countdowns {
+  background: #181c24;
+  border-radius: 10px;
+  padding: 6px 10px 0;
+}
+
+.today-title,
+.week-title {
+  font-size: 2.1rem;
+  font-weight: 600;
+  margin-top: 2px;
+  margin-bottom: 6px;
+}
+
+.today-events {
+  list-style: none;
+  font-size: 1.4rem;
+}
+
+.today-events li {
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.today-events .time {
+  display: inline-block;
+  width: 4.5em;
+  margin-right: 0.5em;
+  opacity: 0.9;
+}
+
+.week-list {
+  list-style: none;
+  font-size: 1.3rem;
+}
+
+.week-list li {
+  display: flex;
+  justify-content: flex-start;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.week-list .dow {
+  width: 7em;
+  opacity: 0.8;
+}
+
+.week-list .label.empty {
+  color: #555;
+}
+
+.middle {
+  display: grid;
+  grid-template-columns: 2fr 2fr;
+  gap: 6px;
+}
+
+.countdowns .panel-title,
+.weather .panel-title,
+.checklist .panel-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.cards {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.card {
+  flex: 1;
+  background: #222733;
+  border-radius: 10px;
+  padding: 6px 8px 4px;
+  text-align: center;
+}
+
+.card-label {
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+.card-days {
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.card-sub {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 0;
+}
+
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.weather-day {
+  text-align: center;
+}
+
+.weather-label {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.weather-icon {
+  width: 72px;
+  height: 72px;
+  display: block;
+  margin: 4px auto 6px;
+}
+
+.weather-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.weather-temp {
+  font-size: 1.1rem;
+  margin-bottom: 2px;
+}
+
+.weather-desc {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+.checklist ul {
+  list-style: none;
+  margin-top: 4px;
+  padding-left: 0;
+}
+
+.checklist li {
+  margin-top: 2px;
+}
+
+.footer {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.today-date-small {
+  font-size: 1.1rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+@media (orientation: portrait) {
+  #app {
+    grid-template-rows: auto 1fr auto;
+  }
+
+  .header,
+  .middle {
+    grid-template-columns: 1fr;
+  }
+}
+
+#daily-checks li {
+  cursor: pointer;
+  font-size: 1.4rem;
+  line-height: 1.8;
+  transition: color 0.15s ease;
+}
+
+#daily-checks li.checked {
+  color: #4DD0E1;
+}
+
+#daily-checks li.pulse-reminder {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 5px transparent;
+  }
+  50% {
+    text-shadow: 0 0 15px #4DD0E1, 0 0 25px #4DD0E1, 0 0 35px #4DD0E1;
+  }
+}

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kitchen Dashboard</title>
+  <link rel="stylesheet" href="style.css?v=11" />
+</head>
+<body>
+  <div id="app">
+    <header class="header">
+      <div class="weather">
+        <div class="panel-title">
+          <span id="current-datetime">Loading...</span>
+        </div>
+        <div class="weather-grid" id="weather-grid">
+          <div class="weather-day">
+            <div class="weather-label">Loading...</div>
+            <div class="weather-icon"></div>
+            <div class="weather-temp">--° / --°</div>
+            <div class="weather-desc">--</div>
+          </div>
+        </div>
+      </div>
+      <div class="checklist">
+        <div class="panel-title">Daily Checks</div>
+        <ul id="daily-checks">
+          <li data-key="kiki-breakfast">☐ Feed Kiki – Breakfast</li>
+          <li data-key="kiki-dinner">☐ Feed Kiki – Dinner</li>
+          <li data-key="clean-kitchen">☐ Clean the kitchen</li>
+        </ul>
+      </div>
+    </header>
+
+    <section class="middle">
+      <div class="today">
+        <div class="today-title">Today</div>
+        <ul class="today-events" id="today-events">
+          <li>loading…</li>
+        </ul>
+        <div class="today-title" style="margin-top: 4px;">Tomorrow</div>
+        <ul class="today-events" id="tomorrow-events">
+          <li>loading…</li>
+        </ul>
+      </div>
+      <div class="week">
+        <div class="week-title">Upcoming</div>
+        <ul class="week-list" id="upcoming-events">
+          <li>loading…</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="countdowns">
+        <div class="panel-title">Countdowns</div>
+        <div class="cards" id="countdown-cards">
+          <div class="card">
+            <div class="card-label">Mexico Trip</div>
+            <div class="card-days">7</div>
+            <div class="card-sub">days</div>
+          </div>
+          <div class="card">
+            <div class="card-label">Anniversary</div>
+            <div class="card-days">109</div>
+            <div class="card-sub">days</div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Set current date/time in weather header
+    (function () {
+      function updateDateTime() {
+        const now = new Date();
+        const dateOpts = { weekday: 'long', month: 'short', day: 'numeric' };
+        const timeOpts = { hour: 'numeric', minute: '2-digit' };
+        const dateStr = now.toLocaleDateString(undefined, dateOpts);
+        const timeStr = now.toLocaleTimeString(undefined, timeOpts);
+        
+        const el = document.getElementById('current-datetime');
+        if (el) el.textContent = dateStr + ', ' + timeStr;
+      }
+      
+      updateDateTime();
+      // Update time every minute
+      setInterval(updateDateTime, 60 * 1000);
+    })();
+
+    // Daily checklist toggle + daily reset at ~2am
+    (function () {
+      const list = document.getElementById('daily-checks');
+      if (!list) return;
+
+      const STORAGE_KEY = 'nuvi-daily-checks';
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : { date: null, items: {} };
+        } catch {
+          return { date: null, items: {} };
+        }
+      }
+
+      function saveState(state) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch {}
+      }
+
+      function isSameDay(a, b) {
+        return a.getFullYear() === b.getFullYear() &&
+               a.getMonth() === b.getMonth() &&
+               a.getDate() === b.getDate();
+      }
+
+      function shouldReset(lastDate, now) {
+        if (!lastDate) return true;
+        const last = new Date(lastDate);
+        if (!isSameDay(last, now)) return true;
+        if (now.getHours() >= 2 && last.getHours() < 2) return true;
+        return false;
+      }
+
+      let state = loadState();
+      const now = new Date();
+
+      if (shouldReset(state.date ? new Date(state.date) : null, now)) {
+        state = { date: now.toISOString(), items: {} };
+        saveState(state);
+      }
+
+      // Apply state to list
+      Array.from(list.querySelectorAll('li[data-key]')).forEach(li => {
+        const key = li.getAttribute('data-key');
+        const checked = !!state.items[key];
+        const label = li.textContent.replace(/^☐ |^☑ /, '').trim();
+        li.textContent = (checked ? '☑ ' : '☐ ') + label;
+        li.classList.toggle('checked', checked);
+      });
+
+      list.addEventListener('click', (e) => {
+        const li = e.target.closest('li[data-key]');
+        if (!li) return;
+        const key = li.getAttribute('data-key');
+        const current = !!state.items[key];
+        const newChecked = !current;
+        state.items[key] = newChecked;
+        state.date = new Date().toISOString();
+        const label = li.textContent.replace(/^☐ |^☑ /, '').trim();
+        li.textContent = (newChecked ? '☑ ' : '☐ ') + label;
+        li.classList.toggle('checked', newChecked);
+        li.classList.remove('pulse-reminder'); // Stop pulsing when checked
+        saveState(state);
+      });
+
+      // Kiki feeding reminder pulses
+      function checkFeedingReminders() {
+        const now = new Date();
+        const hour = now.getHours();
+        const min = now.getMinutes();
+        const timeVal = hour + min / 60;
+
+        const breakfastLi = list.querySelector('[data-key="kiki-breakfast"]');
+        const dinnerLi = list.querySelector('[data-key="kiki-dinner"]');
+
+        // Breakfast: pulse starting at 8:00 AM if unchecked
+        if (breakfastLi && !state.items['kiki-breakfast']) {
+          if (timeVal >= 8) {
+            breakfastLi.classList.add('pulse-reminder');
+          } else {
+            breakfastLi.classList.remove('pulse-reminder');
+          }
+        }
+
+        // Dinner: pulse starting at 6:00 PM (18:00) if unchecked
+        if (dinnerLi && !state.items['kiki-dinner']) {
+          if (timeVal >= 18) {
+            dinnerLi.classList.add('pulse-reminder');
+          } else {
+            dinnerLi.classList.remove('pulse-reminder');
+          }
+        }
+
+        // Clean kitchen: pulse starting at 9:00 PM (21:00) if unchecked
+        const kitchenLi = list.querySelector('[data-key="clean-kitchen"]');
+        if (kitchenLi && !state.items['clean-kitchen']) {
+          if (timeVal >= 21) {
+            kitchenLi.classList.add('pulse-reminder');
+          } else {
+            kitchenLi.classList.remove('pulse-reminder');
+          }
+        }
+      }
+
+      checkFeedingReminders();
+      setInterval(checkFeedingReminders, 60 * 1000); // Check every minute
+    })();
+
+    // Warm sonar chime using Web Audio API
+    (function() {
+      let audioCtx = null;
+
+      function playWarmPing(freq = 600, startTime = 0) {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        
+        // Warm envelope: soft attack, gentle decay
+        const now = audioCtx.currentTime + startTime;
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.3, now + 0.05);  // soft attack
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6); // gentle decay
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start(now);
+        osc.stop(now + 0.7);
+      }
+
+      function playChimeSet(startOffset = 0) {
+        // Three warm pings, slightly descending for pleasant feel
+        playWarmPing(680, startOffset);
+        playWarmPing(600, startOffset + 0.4);
+        playWarmPing(540, startOffset + 0.8);
+      }
+
+      function playChime() {
+        // Three sets of three pings
+        playChimeSet(0);
+        playChimeSet(1.5);
+        playChimeSet(3.0);
+      }
+
+      // Expose globally for event reminders
+      window.playReminderChime = playChime;
+    })();
+  </script>
+  <script src="app.js?v=11"></script>
+</body>
+</html>
