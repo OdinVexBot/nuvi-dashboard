@@ -154,6 +154,12 @@
         li.textContent = (newChecked ? '☑ ' : '☐ ') + label;
         li.classList.toggle('checked', newChecked);
         li.classList.remove('pulse-reminder'); // Stop pulsing when checked
+
+        // Play ding sound when checking a box
+        if (newChecked && window.playCheckboxDing) {
+          window.playCheckboxDing();
+        }
+
         saveState(state);
       });
 
@@ -206,22 +212,22 @@
 
       function playWarmPing(freq = 600, startTime = 0) {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
+
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
-        
+
         osc.type = 'sine';
         osc.frequency.value = freq;
-        
+
         // Warm envelope: soft attack, gentle decay
         const now = audioCtx.currentTime + startTime;
         gain.gain.setValueAtTime(0, now);
         gain.gain.linearRampToValueAtTime(0.3, now + 0.05);  // soft attack
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6); // gentle decay
-        
+
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-        
+
         osc.start(now);
         osc.stop(now + 0.7);
       }
@@ -240,8 +246,31 @@
         playChimeSet(3.0);
       }
 
-      // Expose globally for event reminders
+      function playCheckboxDing() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.value = 880; // Bright, high frequency (A5 note)
+
+        // Quick, bright envelope for a "ding" sound
+        const now = audioCtx.currentTime;
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.4, now + 0.01);  // very fast attack
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3); // quick decay
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.35);
+      }
+
+      // Expose globally for event reminders and checkbox clicks
       window.playReminderChime = playChime;
+      window.playCheckboxDing = playCheckboxDing;
     })();
   </script>
   <script src="app.js?v=11"></script>
