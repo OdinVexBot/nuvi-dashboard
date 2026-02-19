@@ -203,6 +203,11 @@ body {
   opacity: 0.9;
 }
 
+#current-datetime {
+  text-decoration: none;
+}
+
+
 @media (orientation: portrait) {
   #app {
     grid-template-rows: auto 1fr auto;
