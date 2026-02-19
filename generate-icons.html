@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Icon Generator</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #1a1f2e;
+      color: #eceff1;
+    }
+    h1 { color: #4DD0E1; }
+    button {
+      background: #4DD0E1;
+      color: #1a1f2e;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 10px 5px;
+    }
+    button:hover { background: #26c6da; }
+    .preview {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .icon-preview {
+      text-align: center;
+    }
+    .icon-preview canvas {
+      border: 1px solid #4DD0E1;
+      margin: 10px 0;
+    }
+    .status {
+      padding: 10px;
+      margin: 10px 0;
+      background: #2c3e50;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>PWA Icon Generator</h1>
+  <p>This tool will generate PNG icons from the SVG favicon for iOS and Android devices.</p>
+
+  <button onclick="generateAllIcons()">Generate All Icons</button>
+
+  <div id="status" class="status"></div>
+  <div id="preview" class="preview"></div>
+
+  <script>
+    const sizes = [
+      { size: 72, name: 'icon-72.png', desc: 'Android (ldpi)' },
+      { size: 96, name: 'icon-96.png', desc: 'Android (mdpi)' },
+      { size: 128, name: 'icon-128.png', desc: 'Android (hdpi)' },
+      { size: 144, name: 'icon-144.png', desc: 'Android (xhdpi)' },
+      { size: 152, name: 'icon-152.png', desc: 'iOS iPad' },
+      { size: 180, name: 'icon-180.png', desc: 'iOS iPhone' },
+      { size: 192, name: 'icon-192.png', desc: 'Android (xxhdpi)' },
+      { size: 384, name: 'icon-384.png', desc: 'Android (xxxhdpi)' },
+      { size: 512, name: 'icon-512.png', desc: 'Android (splash)' }
+    ];
+
+    // Embedded SVG content
+    const svgText = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Outer circle -->
+  <circle cx="50" cy="50" r="48" fill="#1a1f2e" stroke="#4DD0E1" stroke-width="3"/>
+
+  <!-- Inner circle -->
+  <circle cx="50" cy="50" r="6" fill="#4DD0E1"/>
+
+  <!-- North needle (red) -->
+  <path d="M 50 10 L 45 50 L 50 45 L 55 50 Z" fill="#FF5252"/>
+
+  <!-- South needle (white) -->
+  <path d="M 50 90 L 45 50 L 50 55 L 55 50 Z" fill="#ECEFF1"/>
+
+  <!-- Cardinal direction markers -->
+  <text x="50" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#4DD0E1" font-family="sans-serif">N</text>
+  <text x="78" y="55" text-anchor="middle" font-size="12" fill="#4DD0E1" font-family="sans-serif">E</text>
+  <text x="50" y="88" text-anchor="middle" font-size="12" fill="#4DD0E1" font-family="sans-serif">S</text>
+  <text x="22" y="55" text-anchor="middle" font-size="12" fill="#4DD0E1" font-family="sans-serif">W</text>
+</svg>`;
+
+    async function generateAllIcons() {
+      const statusDiv = document.getElementById('status');
+      const previewDiv = document.getElementById('preview');
+
+      statusDiv.textContent = 'Generating icons...';
+      previewDiv.innerHTML = '';
+
+      try {
+        for (const {size, name, desc} of sizes) {
+          await generateIcon(svgText, size, name, desc);
+        }
+
+        statusDiv.textContent = 'Done! Click each image to download.';
+      } catch (error) {
+        statusDiv.textContent = 'Error: ' + error.message;
+      }
+    }
+
+    async function generateIcon(svgText, size, filename, description) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        const blob = new Blob([svgText], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+
+          // Draw the image
+          ctx.drawImage(img, 0, 0, size, size);
+
+          // Convert to blob and create download link
+          canvas.toBlob((blob) => {
+            const downloadUrl = URL.createObjectURL(blob);
+
+            // Create preview
+            const previewDiv = document.getElementById('preview');
+            const iconDiv = document.createElement('div');
+            iconDiv.className = 'icon-preview';
+
+            const previewCanvas = document.createElement('canvas');
+            previewCanvas.width = 128;
+            previewCanvas.height = 128;
+            const previewCtx = previewCanvas.getContext('2d');
+            previewCtx.drawImage(img, 0, 0, 128, 128);
+
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = filename;
+            link.appendChild(previewCanvas);
+
+            const label = document.createElement('div');
+            label.textContent = `${size}×${size}`;
+
+            const descLabel = document.createElement('div');
+            descLabel.textContent = description;
+            descLabel.style.fontSize = '12px';
+            descLabel.style.color = '#4DD0E1';
+
+            iconDiv.appendChild(link);
+            iconDiv.appendChild(label);
+            iconDiv.appendChild(descLabel);
+            previewDiv.appendChild(iconDiv);
+
+            URL.revokeObjectURL(url);
+            resolve();
+          }, 'image/png');
+        };
+
+        img.src = url;
+      });
+    }
+  </script>
+</body>
+</html>
