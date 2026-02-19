@@ -7,7 +7,7 @@
  */
 
 // Configuration
-$SECRET = 'your-secret-key-here'; // CHANGE THIS to a random string
+$SECRET = '11ef3c2afba09858ff4b159d4947d29700d13753eb27463ec12747414837338d'; // CHANGE THIS to a random string
 $REPO_PATH = '/home/apps/nuvi-dashboard'; // Path to your repo on the server
 $BRANCH = 'main';
 $LOG_FILE = $REPO_PATH . '/webhook.log';
