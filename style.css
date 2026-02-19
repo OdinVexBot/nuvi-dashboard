@@ -207,6 +207,7 @@ body {
   text-decoration: none;
 }
 
+
 @media (orientation: portrait) {
   #app {
     grid-template-rows: auto 1fr auto;
