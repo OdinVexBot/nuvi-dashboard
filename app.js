@@ -41,21 +41,28 @@ function getEventEmoji(subject) {
   return fallbackEmojis[hash % fallbackEmojis.length];
 }
 
-// SVG icons for weather conditions
-const weatherIcons = {
-  sunny: `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="14" fill="#FFD86B"/><g stroke="#FFD86B" stroke-width="3"><line x1="32" y1="6" x2="32" y2="0"/><line x1="32" y1="64" x2="32" y2="58"/><line x1="6" y1="32" x2="0" y2="32"/><line x1="64" y1="32" x2="58" y2="32"/><line x1="50" y1="14" x2="55" y2="9"/><line x1="14" y1="50" x2="9" y2="55"/><line x1="50" y1="50" x2="55" y2="55"/><line x1="14" y1="14" x2="9" y2="9"/></g></svg>`,
-  clear: `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="14" fill="#FFD86B"/><g stroke="#FFD86B" stroke-width="3"><line x1="32" y1="6" x2="32" y2="0"/><line x1="32" y1="64" x2="32" y2="58"/><line x1="6" y1="32" x2="0" y2="32"/><line x1="64" y1="32" x2="58" y2="32"/><line x1="50" y1="14" x2="55" y2="9"/><line x1="14" y1="50" x2="9" y2="55"/><line x1="50" y1="50" x2="55" y2="55"/><line x1="14" y1="14" x2="9" y2="9"/></g></svg>`,
-  'partly-cloudy': `<svg viewBox="0 0 64 64"><circle cx="22" cy="24" r="10" fill="#FFD86B"/><ellipse cx="38" cy="38" rx="16" ry="10" fill="#9BA4B4"/><ellipse cx="24" cy="40" rx="14" ry="9" fill="#9BA4B4"/></svg>`,
-  'partly-cloudy-night': `<svg viewBox="0 0 64 64"><path d="M22 14 A12 12 0 1 0 22 38 A10 10 0 1 1 22 14" fill="#FFD86B"/><ellipse cx="38" cy="38" rx="16" ry="10" fill="#9BA4B4"/><ellipse cx="24" cy="40" rx="14" ry="9" fill="#9BA4B4"/></svg>`,
-  cloudy: `<svg viewBox="0 0 64 64"><ellipse cx="36" cy="30" rx="16" ry="10" fill="#9BA4B4"/><ellipse cx="22" cy="32" rx="14" ry="9" fill="#9BA4B4"/><ellipse cx="40" cy="36" rx="12" ry="8" fill="#7A8494"/></svg>`,
-  rain: `<svg viewBox="0 0 64 64"><ellipse cx="34" cy="26" rx="16" ry="10" fill="#9BA4B4"/><ellipse cx="20" cy="28" rx="14" ry="9" fill="#9BA4B4"/><line x1="20" y1="40" x2="16" y2="52" stroke="#4A90E2" stroke-width="3"/><line x1="32" y1="40" x2="28" y2="52" stroke="#4A90E2" stroke-width="3"/><line x1="44" y1="40" x2="40" y2="52" stroke="#4A90E2" stroke-width="3"/></svg>`,
-  snow: `<svg viewBox="0 0 64 64"><ellipse cx="34" cy="26" rx="16" ry="10" fill="#9BA4B4"/><ellipse cx="20" cy="28" rx="14" ry="9" fill="#9BA4B4"/><circle cx="20" cy="46" r="3" fill="#E8F0FE"/><circle cx="32" cy="50" r="3" fill="#E8F0FE"/><circle cx="44" cy="46" r="3" fill="#E8F0FE"/></svg>`,
-  thunderstorm: `<svg viewBox="0 0 64 64"><ellipse cx="34" cy="24" rx="16" ry="10" fill="#6B7280"/><ellipse cx="20" cy="26" rx="14" ry="9" fill="#6B7280"/><polygon points="30,36 24,48 32,48 28,60 38,44 30,44 36,36" fill="#FFD86B"/></svg>`,
-  fog: `<svg viewBox="0 0 64 64"><rect x="8" y="24" width="48" height="4" rx="2" fill="#9BA4B4"/><rect x="12" y="34" width="40" height="4" rx="2" fill="#9BA4B4"/><rect x="8" y="44" width="48" height="4" rx="2" fill="#9BA4B4"/></svg>`
+// Animated weather icons by Bas Milius (MIT) — https://github.com/basmilius/weather-icons
+// Maps dashboard icon keys to local SVG filenames in weather-icons/
+const weatherIconFiles = {
+  sunny:                'clear-day',
+  clear:                'clear-day',
+  'clear-night':        'clear-night',
+  'partly-cloudy':      'partly-cloudy-day',
+  'partly-cloudy-night':'partly-cloudy-night',
+  cloudy:               'overcast',
+  overcast:             'overcast',
+  'overcast-day':       'overcast-day',
+  drizzle:              'drizzle',
+  rain:                 'rain',
+  snow:                 'snow',
+  thunderstorm:         'thunderstorms-rain',
+  fog:                  'fog',
+  mist:                 'mist'
 };
 
 function getWeatherIcon(iconName) {
-  return weatherIcons[iconName] || weatherIcons.cloudy;
+  const file = weatherIconFiles[iconName] || 'not-available';
+  return `<img src="weather-icons/${file}.svg" alt="${iconName}" />`;
 }
 
 function updateFromState(state) {

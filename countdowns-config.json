@@ -17,6 +17,18 @@
       "kind": "subjectContains",
       "match": "Sammamish High School Graduation — Class of 2026",
       "label": "Ruby Graduation"
+    },
+    {
+      "key": "kachess2026",
+      "kind": "subjectContains",
+      "match": "Kachess Campsite Reservation – Box Canyon 139",
+      "label": "Kachess Camping Trip"
+    },
+    {
+      "key": "osuvisit2026",
+      "kind": "subjectContains",
+      "match": "Oregon State University Campus Visit",
+      "label": "OSU Campus Visit"
     }
   ]
 }
