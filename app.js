@@ -317,6 +317,13 @@ setInterval(() => {
 }, 60 * 1000);
 
 // Full page reload every 5 minutes to pick up code changes
+// Uses Fully Kiosk API to clear WebView cache when available,
+// then navigates with a timestamp param to bypass any remaining cache
 setTimeout(() => {
-  window.location.reload();
+  if (typeof fully !== 'undefined' && fully.clearCache) {
+    try { fully.clearCache(); } catch (e) {}
+  }
+  const url = new URL(window.location.href);
+  url.searchParams.set('_t', Date.now());
+  window.location.href = url.toString();
 }, 5 * 60 * 1000);
