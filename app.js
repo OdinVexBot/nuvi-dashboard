@@ -79,9 +79,11 @@ function scopeSvgIds(svgText, prefix) {
     // Replace xlink:href="#x" references (symbol <use>)
     scoped = scoped.split(`xlink:href="#${id}"`).join(`xlink:href="#${scId}"`);
     scoped = scoped.split(`href="#${id}"`).join(`href="#${scId}"`);
-    // Replace begin="x.end" and begin="x..." SMIL animation refs
+    // Replace SMIL animation timing refs:
+    //   begin="x.end+..." or begin="0s; x.end+..." or begin="-.33s; x.end+..."
+    // ID can appear at start of begin value or after "; "
     scoped = scoped.split(`begin="${id}.`).join(`begin="${scId}.`);
-    scoped = scoped.split(`begin="${id};`).join(`begin="${scId};`);
+    scoped = scoped.split(`; ${id}.`).join(`; ${scId}.`);
   }
   return scoped;
 }
