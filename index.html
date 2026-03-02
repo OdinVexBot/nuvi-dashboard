@@ -29,7 +29,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
 
-  <link rel="stylesheet" href="style.css?v=19" />
+  <link rel="stylesheet" href="style.css?v=20" />
 </head>
 <body>
   <div id="app">
@@ -93,6 +93,14 @@
         </div>
       </div>
     </footer>
+  </div>
+
+  <!-- Weather detail popup -->
+  <div id="weather-popup" class="weather-popup-overlay" style="display:none">
+    <div class="weather-popup-card">
+      <div class="weather-popup-close" id="weather-popup-close">&times;</div>
+      <div id="weather-popup-content"></div>
+    </div>
   </div>
 
   <script>
@@ -298,6 +306,6 @@
       window.playCheckboxDing = playCheckboxDing;
     })();
   </script>
-  <script src="app.js?v=19"></script>
+  <script src="app.js?v=20"></script>
 </body>
 </html>

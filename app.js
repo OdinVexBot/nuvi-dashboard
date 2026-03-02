@@ -143,6 +143,98 @@ function getWeatherIcon(iconName) {
   return `<span class="weather-icon-inner" id="${spanId}"></span>`;
 }
 
+// ---- Weather detail popup ----
+function showWeatherPopup(weather) {
+  const cur = weather.current;
+  const today = weather.days[0];
+  if (!cur) return;
+
+  const overlay = document.getElementById('weather-popup');
+  const content = document.getElementById('weather-popup-content');
+  if (!overlay || !content) return;
+
+  const iconHtml = getWeatherIcon(cur.icon);
+
+  content.innerHTML = `
+    <div class="weather-popup-header">
+      <div class="popup-icon">${iconHtml}</div>
+      <div class="popup-temp">${cur.temp != null ? cur.temp + '°' : '--°'}</div>
+      <div class="popup-desc">${cur.desc || today.desc}</div>
+    </div>
+    <div class="weather-popup-grid">
+      <div class="weather-popup-item">
+        <div class="popup-item-label">Feels Like</div>
+        <div class="popup-item-value">${cur.feelsLike != null ? cur.feelsLike + '°' : '--'}</div>
+      </div>
+      <div class="weather-popup-item">
+        <div class="popup-item-label">Humidity</div>
+        <div class="popup-item-value">${cur.humidity != null ? cur.humidity + '%' : '--'}</div>
+      </div>
+      <div class="weather-popup-item">
+        <div class="popup-item-label">Wind</div>
+        <div class="popup-item-value">${cur.windMph != null ? cur.windMph + ' mph' : '--'}</div>
+      </div>
+      <div class="weather-popup-item">
+        <div class="popup-item-label">Rain Chance</div>
+        <div class="popup-item-value">${cur.precipChance != null ? cur.precipChance + '%' : '--'}</div>
+      </div>
+      <div class="weather-popup-item">
+        <div class="popup-item-label">UV Now</div>
+        <div class="popup-item-value">${cur.uvIndex != null ? cur.uvIndex : '--'}</div>
+      </div>
+      <div class="weather-popup-item">
+        <div class="popup-item-label">UV Max</div>
+        <div class="popup-item-value">${cur.uvMax != null ? cur.uvMax : '--'}</div>
+      </div>
+      <div class="weather-popup-item">
+        <div class="popup-item-label">High / Low</div>
+        <div class="popup-item-value">${today.high}° / ${today.low}°</div>
+      </div>
+      <div class="weather-popup-item">
+        <div class="popup-item-label">Wind Max</div>
+        <div class="popup-item-value">${cur.windMaxMph != null ? cur.windMaxMph + ' mph' : '--'}</div>
+      </div>
+    </div>
+    <hr class="weather-popup-divider">
+    <div class="weather-popup-grid">
+      <div class="weather-popup-item">
+        <div class="popup-item-label">Sunrise</div>
+        <div class="popup-item-value">☀️ ${cur.sunrise || '--'}</div>
+      </div>
+      <div class="weather-popup-item">
+        <div class="popup-item-label">Sunset</div>
+        <div class="popup-item-value">🌅 ${cur.sunset || '--'}</div>
+      </div>
+    </div>
+    ${cur.moon ? `
+    <hr class="weather-popup-divider">
+    <div class="weather-popup-moon">
+      <div class="moon-emoji">${cur.moon.emoji}</div>
+      <div class="moon-name">${cur.moon.name}</div>
+    </div>` : ''}
+  `;
+
+  overlay.style.display = 'flex';
+}
+
+function hideWeatherPopup() {
+  const overlay = document.getElementById('weather-popup');
+  if (overlay) overlay.style.display = 'none';
+}
+
+// Close popup on overlay click, close button, or Escape key
+document.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('weather-popup');
+  const closeBtn = document.getElementById('weather-popup-close');
+  if (closeBtn) closeBtn.addEventListener('click', hideWeatherPopup);
+  if (overlay) overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) hideWeatherPopup();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') hideWeatherPopup();
+  });
+});
+
 function updateFromState(state) {
   // Weather
   const weatherGrid = document.getElementById('weather-grid');
@@ -183,6 +275,13 @@ function updateFromState(state) {
         <div class="weather-temp">${temp}</div>
         <div class="weather-desc">${desc}</div>
       `;
+
+      // Make the Now tile tappable
+      if (i === 0 && cur) {
+        div.classList.add('now-tile');
+        div.addEventListener('click', () => showWeatherPopup(state.weather));
+      }
+
       weatherGrid.appendChild(div);
     }
   }
