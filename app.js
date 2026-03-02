@@ -62,7 +62,7 @@ const weatherIconFiles = {
 
 function getWeatherIcon(iconName) {
   const file = weatherIconFiles[iconName] || 'not-available';
-  return `<img src="weather-icons/${file}.svg" alt="${iconName}" />`;
+  return `<object type="image/svg+xml" data="weather-icons/${file}.svg" aria-label="${iconName}"></object>`;
 }
 
 function updateFromState(state) {
