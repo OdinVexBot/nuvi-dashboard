@@ -397,8 +397,31 @@ body {
   flex: 1;
 }
 
-.weather-popup-moon-inline .moon-emoji {
-  font-size: 1.8rem;
+.popup-inline-icon {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+.popup-inline-icon svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+}
+
+.popup-moon-icon {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  vertical-align: middle;
+}
+
+.popup-moon-icon svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
 }
 
 .weather-popup-moon-inline .moon-name {

@@ -68,7 +68,17 @@ const weatherIconFiles = {
   'uv-index-8':         'uv-index-8',
   'uv-index-9':         'uv-index-9',
   'uv-index-10':        'uv-index-10',
-  'uv-index-11':        'uv-index-11'
+  'uv-index-11':        'uv-index-11',
+  sunrise:              'sunrise',
+  sunset:               'sunset',
+  'moon-new':           'moon-new',
+  'moon-waxing-crescent':'moon-waxing-crescent',
+  'moon-first-quarter': 'moon-first-quarter',
+  'moon-waxing-gibbous':'moon-waxing-gibbous',
+  'moon-full':          'moon-full',
+  'moon-waning-gibbous':'moon-waning-gibbous',
+  'moon-last-quarter':  'moon-last-quarter',
+  'moon-waning-crescent':'moon-waning-crescent'
 };
 
 // SVG icon cache — fetched once per file, IDs scoped per instance
@@ -194,14 +204,14 @@ function showWeatherPopup(weather) {
     <div class="weather-popup-footer">
       <div class="weather-popup-item">
         <div class="popup-item-label">Sunrise</div>
-        <div class="popup-item-value">☀️ ${cur.sunrise || '--'}</div>
+        <div class="popup-item-value"><span class="popup-inline-icon">${getWeatherIcon('sunrise')}</span> ${cur.sunrise || '--'}</div>
       </div>
       <div class="weather-popup-item">
         <div class="popup-item-label">Sunset</div>
-        <div class="popup-item-value">🌅 ${cur.sunset || '--'}</div>
+        <div class="popup-item-value"><span class="popup-inline-icon">${getWeatherIcon('sunset')}</span> ${cur.sunset || '--'}</div>
       </div>
       ${cur.moon ? `<div class="weather-popup-moon-inline">
-        <span class="moon-emoji">${cur.moon.emoji}</span>
+        <span class="popup-moon-icon">${getWeatherIcon(cur.moon.icon || 'moon-full')}</span>
         <span class="moon-name">${cur.moon.name}</span>
       </div>` : ''}
     </div>
