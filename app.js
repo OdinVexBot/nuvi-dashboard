@@ -60,9 +60,27 @@ const weatherIconFiles = {
   mist:                 'mist'
 };
 
+// SVG icon cache — fetched once, reused across renders
+const svgCache = {};
+
 function getWeatherIcon(iconName) {
   const file = weatherIconFiles[iconName] || 'not-available';
-  return `<img src="weather-icons/${file}.svg" alt="${iconName}" />`;
+  const url = `weather-icons/${file}.svg`;
+  // Return a placeholder span; async-fill with inlined SVG
+  const id = 'wi-' + Math.random().toString(36).slice(2, 8);
+  if (svgCache[file]) {
+    return `<span class="weather-icon-inner">${svgCache[file]}</span>`;
+  }
+  // Fetch and inject after DOM insertion
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (svgCache[file]) { el.innerHTML = svgCache[file]; return; }
+    fetch(url).then(r => r.ok ? r.text() : '').then(svg => {
+      if (svg) { svgCache[file] = svg; if (document.getElementById(id)) document.getElementById(id).innerHTML = svg; }
+    }).catch(() => {});
+  }, 0);
+  return `<span class="weather-icon-inner" id="${id}"></span>`;
 }
 
 function updateFromState(state) {
