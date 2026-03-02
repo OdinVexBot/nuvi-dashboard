@@ -350,27 +350,27 @@ body {
 
 .weather-popup-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
 }
 
 .weather-popup-item {
   background: #262b38;
   border-radius: 10px;
-  padding: 12px 8px;
+  padding: 14px 10px;
   text-align: center;
 }
 
 .weather-popup-item .popup-item-label {
-  font-size: 0.9rem;
+  font-size: 1rem;
   opacity: 0.6;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 
 .weather-popup-item .popup-item-value {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 500;
 }
 
