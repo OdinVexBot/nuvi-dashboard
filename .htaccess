@@ -1,0 +1,18 @@
+# Prevent aggressive caching of dashboard assets
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|js|css|json)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+
+  # Allow SVG icons to cache for 1 hour (they change rarely)
+  <FilesMatch "\.svg$">
+    Header set Cache-Control "public, max-age=3600"
+  </FilesMatch>
+</IfModule>
+
+# Serve SVGs with correct MIME type
+<IfModule mod_mime.c>
+  AddType image/svg+xml .svg .svgz
+</IfModule>

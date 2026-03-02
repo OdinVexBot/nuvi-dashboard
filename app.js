@@ -60,9 +60,43 @@ const weatherIconFiles = {
   mist:                 'mist'
 };
 
+// SVG icon cache — fetched once, reused across renders
+const svgCache = {};
+
 function getWeatherIcon(iconName) {
   const file = weatherIconFiles[iconName] || 'not-available';
-  return `<object type="image/svg+xml" data="weather-icons/${file}.svg" aria-label="${iconName}"></object>`;
+  const id = 'wi-' + Math.random().toString(36).slice(2, 8);
+  if (svgCache[file]) {
+    return `<span class="weather-icon-inner" id="${id}">${svgCache[file]}</span>`;
+  }
+  // Return placeholder, then fetch + inject via DOMParser for SMIL activation
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (svgCache[file]) { el.innerHTML = svgCache[file]; return; }
+    fetch(`weather-icons/${file}.svg`)
+      .then(r => r.ok ? r.text() : '')
+      .then(svgText => {
+        if (!svgText) return;
+        svgCache[file] = svgText;
+        const target = document.getElementById(id);
+        if (!target) return;
+        // Parse as XML and adopt proper SVG DOM nodes (activates SMIL)
+        try {
+          const doc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+          const svg = doc.documentElement;
+          if (svg && svg.nodeName === 'svg') {
+            target.innerHTML = '';
+            target.appendChild(document.importNode(svg, true));
+            return;
+          }
+        } catch (e) {}
+        // Fallback: innerHTML
+        target.innerHTML = svgText;
+      })
+      .catch(() => {});
+  }, 0);
+  return `<span class="weather-icon-inner" id="${id}"></span>`;
 }
 
 function updateFromState(state) {
