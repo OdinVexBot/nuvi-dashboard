@@ -375,58 +375,43 @@ body {
 }
 
 .weather-popup-footer {
-  display: flex;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
   margin-top: 14px;
-  align-items: center;
-  justify-content: center;
 }
 
-.weather-popup-footer .weather-popup-item {
-  flex: 1;
-}
-
-.weather-popup-moon-inline {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+.weather-popup-footer-tile {
   background: #262b38;
-  border-radius: 8px;
-  padding: 7px 12px;
-  flex: 1;
+  border-radius: 10px;
+  padding: 10px 8px 12px;
+  text-align: center;
 }
 
-.popup-inline-icon {
-  display: inline-block;
-  width: 28px;
-  height: 28px;
-  vertical-align: middle;
-  margin-right: 2px;
+.footer-tile-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 4px;
+  display: block;
 }
 
-.popup-inline-icon svg {
+.footer-tile-icon svg {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
 }
 
-.popup-moon-icon {
-  display: inline-block;
-  width: 36px;
-  height: 36px;
-  vertical-align: middle;
+.footer-tile-label {
+  font-size: 0.9rem;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
 }
 
-.popup-moon-icon svg {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
-}
-
-.weather-popup-moon-inline .moon-name {
-  font-size: 1.15rem;
-  opacity: 0.8;
+.footer-tile-value {
+  font-size: 1.35rem;
+  font-weight: 500;
 }
 
 .weather-day.now-tile {
@@ -483,6 +468,16 @@ body {
   }
 
   .weather-popup-footer {
-    flex-wrap: wrap;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .footer-tile-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .footer-tile-value {
+    font-size: 1.1rem;
   }
 }

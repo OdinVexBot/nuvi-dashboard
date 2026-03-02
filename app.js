@@ -202,17 +202,20 @@ function showWeatherPopup(weather) {
       </div>
     </div>
     <div class="weather-popup-footer">
-      <div class="weather-popup-item">
-        <div class="popup-item-label">Sunrise</div>
-        <div class="popup-item-value"><span class="popup-inline-icon">${getWeatherIcon('sunrise')}</span> ${cur.sunrise || '--'}</div>
+      <div class="weather-popup-footer-tile">
+        <div class="footer-tile-icon">${getWeatherIcon('sunrise')}</div>
+        <div class="footer-tile-label">Sunrise</div>
+        <div class="footer-tile-value">${cur.sunrise || '--'}</div>
       </div>
-      <div class="weather-popup-item">
-        <div class="popup-item-label">Sunset</div>
-        <div class="popup-item-value"><span class="popup-inline-icon">${getWeatherIcon('sunset')}</span> ${cur.sunset || '--'}</div>
+      <div class="weather-popup-footer-tile">
+        <div class="footer-tile-icon">${getWeatherIcon('sunset')}</div>
+        <div class="footer-tile-label">Sunset</div>
+        <div class="footer-tile-value">${cur.sunset || '--'}</div>
       </div>
-      ${cur.moon ? `<div class="weather-popup-moon-inline">
-        <span class="popup-moon-icon">${getWeatherIcon(cur.moon.icon || 'moon-full')}</span>
-        <span class="moon-name">${cur.moon.name}</span>
+      ${cur.moon ? `<div class="weather-popup-footer-tile">
+        <div class="footer-tile-icon">${getWeatherIcon(cur.moon.icon || 'moon-full')}</div>
+        <div class="footer-tile-label">Moon</div>
+        <div class="footer-tile-value">${cur.moon.name}</div>
       </div>` : ''}
     </div>
   `;
