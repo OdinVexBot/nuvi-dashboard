@@ -14,7 +14,7 @@ body {
   display: grid;
   grid-template-rows: auto 1fr auto;
   height: 100vh;
-  padding: 6px 10px 6px;
+  padding: 4px 10px 6px;
   gap: 6px;
 }
 
@@ -275,15 +275,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
 }
 
 .weather-popup-card {
   background: #1e222c;
   border: 1px solid #2a2f3a;
   border-radius: 16px;
-  padding: 24px 28px 20px;
-  max-width: 420px;
+  padding: 18px 24px 16px;
+  max-width: 720px;
   width: 100%;
   position: relative;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
@@ -291,8 +291,8 @@ body {
 
 .weather-popup-close {
   position: absolute;
-  top: 10px;
-  right: 16px;
+  top: 8px;
+  right: 14px;
   font-size: 2rem;
   cursor: pointer;
   opacity: 0.6;
@@ -303,81 +303,107 @@ body {
   opacity: 1;
 }
 
-.weather-popup-header {
-  text-align: center;
-  margin-bottom: 16px;
+/* Horizontal two-column layout */
+.weather-popup-body {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
 }
 
-.weather-popup-header .popup-icon {
-  width: 90px;
-  height: 90px;
-  margin: 0 auto 8px;
+.weather-popup-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  flex-shrink: 0;
+}
+
+.weather-popup-left .popup-icon {
+  width: 100px;
+  height: 100px;
   display: block;
 }
 
-.weather-popup-header .popup-icon svg {
+.weather-popup-left .popup-icon svg {
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.25));
 }
 
-.weather-popup-header .popup-temp {
-  font-size: 2.4rem;
+.weather-popup-left .popup-temp {
+  font-size: 2.6rem;
   font-weight: 600;
+  margin-top: 4px;
 }
 
-.weather-popup-header .popup-desc {
-  font-size: 1.15rem;
+.weather-popup-left .popup-desc {
+  font-size: 1.1rem;
   opacity: 0.85;
   margin-top: 2px;
 }
 
+.weather-popup-right {
+  flex: 1;
+  min-width: 0;
+}
+
 .weather-popup-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 16px;
-  margin-top: 12px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 8px;
 }
 
 .weather-popup-item {
   background: #262b38;
-  border-radius: 10px;
-  padding: 10px 12px;
+  border-radius: 8px;
+  padding: 7px 6px;
   text-align: center;
 }
 
 .weather-popup-item .popup-item-label {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   opacity: 0.6;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 4px;
+  letter-spacing: 0.04em;
+  margin-bottom: 3px;
 }
 
 .weather-popup-item .popup-item-value {
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   font-weight: 500;
 }
 
-.weather-popup-divider {
-  border: none;
-  border-top: 1px solid #2a2f3a;
-  margin: 14px 0;
+.weather-popup-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
 }
 
-.weather-popup-moon {
-  text-align: center;
-  margin-top: 4px;
+.weather-popup-footer .weather-popup-item {
+  flex: 1;
 }
 
-.weather-popup-moon .moon-emoji {
-  font-size: 2rem;
+.weather-popup-moon-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #262b38;
+  border-radius: 8px;
+  padding: 7px 12px;
+  flex: 1;
 }
 
-.weather-popup-moon .moon-name {
+.weather-popup-moon-inline .moon-emoji {
+  font-size: 1.5rem;
+}
+
+.weather-popup-moon-inline .moon-name {
   font-size: 1rem;
   opacity: 0.8;
-  margin-top: 2px;
 }
 
 .weather-day.now-tile {

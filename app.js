@@ -156,47 +156,50 @@ function showWeatherPopup(weather) {
   const iconHtml = getWeatherIcon(cur.icon);
 
   content.innerHTML = `
-    <div class="weather-popup-header">
-      <div class="popup-icon">${iconHtml}</div>
-      <div class="popup-temp">${cur.temp != null ? cur.temp + '°' : '--°'}</div>
-      <div class="popup-desc">${cur.desc || today.desc}</div>
+    <div class="weather-popup-body">
+      <div class="weather-popup-left">
+        <div class="popup-icon">${iconHtml}</div>
+        <div class="popup-temp">${cur.temp != null ? cur.temp + '°' : '--°'}</div>
+        <div class="popup-desc">${cur.desc || today.desc}</div>
+      </div>
+      <div class="weather-popup-right">
+        <div class="weather-popup-grid">
+          <div class="weather-popup-item">
+            <div class="popup-item-label">Feels Like</div>
+            <div class="popup-item-value">${cur.feelsLike != null ? cur.feelsLike + '°' : '--'}</div>
+          </div>
+          <div class="weather-popup-item">
+            <div class="popup-item-label">Humidity</div>
+            <div class="popup-item-value">${cur.humidity != null ? cur.humidity + '%' : '--'}</div>
+          </div>
+          <div class="weather-popup-item">
+            <div class="popup-item-label">Wind</div>
+            <div class="popup-item-value">${cur.windMph != null ? cur.windMph + ' mph' : '--'}</div>
+          </div>
+          <div class="weather-popup-item">
+            <div class="popup-item-label">Rain</div>
+            <div class="popup-item-value">${cur.precipChance != null ? cur.precipChance + '%' : '--'}</div>
+          </div>
+          <div class="weather-popup-item">
+            <div class="popup-item-label">UV Now</div>
+            <div class="popup-item-value">${cur.uvIndex != null ? cur.uvIndex : '--'}</div>
+          </div>
+          <div class="weather-popup-item">
+            <div class="popup-item-label">UV Max</div>
+            <div class="popup-item-value">${cur.uvMax != null ? cur.uvMax : '--'}</div>
+          </div>
+          <div class="weather-popup-item">
+            <div class="popup-item-label">High / Low</div>
+            <div class="popup-item-value">${today.high}° / ${today.low}°</div>
+          </div>
+          <div class="weather-popup-item">
+            <div class="popup-item-label">Wind Max</div>
+            <div class="popup-item-value">${cur.windMaxMph != null ? cur.windMaxMph + ' mph' : '--'}</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="weather-popup-grid">
-      <div class="weather-popup-item">
-        <div class="popup-item-label">Feels Like</div>
-        <div class="popup-item-value">${cur.feelsLike != null ? cur.feelsLike + '°' : '--'}</div>
-      </div>
-      <div class="weather-popup-item">
-        <div class="popup-item-label">Humidity</div>
-        <div class="popup-item-value">${cur.humidity != null ? cur.humidity + '%' : '--'}</div>
-      </div>
-      <div class="weather-popup-item">
-        <div class="popup-item-label">Wind</div>
-        <div class="popup-item-value">${cur.windMph != null ? cur.windMph + ' mph' : '--'}</div>
-      </div>
-      <div class="weather-popup-item">
-        <div class="popup-item-label">Rain Chance</div>
-        <div class="popup-item-value">${cur.precipChance != null ? cur.precipChance + '%' : '--'}</div>
-      </div>
-      <div class="weather-popup-item">
-        <div class="popup-item-label">UV Now</div>
-        <div class="popup-item-value">${cur.uvIndex != null ? cur.uvIndex : '--'}</div>
-      </div>
-      <div class="weather-popup-item">
-        <div class="popup-item-label">UV Max</div>
-        <div class="popup-item-value">${cur.uvMax != null ? cur.uvMax : '--'}</div>
-      </div>
-      <div class="weather-popup-item">
-        <div class="popup-item-label">High / Low</div>
-        <div class="popup-item-value">${today.high}° / ${today.low}°</div>
-      </div>
-      <div class="weather-popup-item">
-        <div class="popup-item-label">Wind Max</div>
-        <div class="popup-item-value">${cur.windMaxMph != null ? cur.windMaxMph + ' mph' : '--'}</div>
-      </div>
-    </div>
-    <hr class="weather-popup-divider">
-    <div class="weather-popup-grid">
+    <div class="weather-popup-footer">
       <div class="weather-popup-item">
         <div class="popup-item-label">Sunrise</div>
         <div class="popup-item-value">☀️ ${cur.sunrise || '--'}</div>
@@ -205,13 +208,11 @@ function showWeatherPopup(weather) {
         <div class="popup-item-label">Sunset</div>
         <div class="popup-item-value">🌅 ${cur.sunset || '--'}</div>
       </div>
+      ${cur.moon ? `<div class="weather-popup-moon-inline">
+        <span class="moon-emoji">${cur.moon.emoji}</span>
+        <span class="moon-name">${cur.moon.name}</span>
+      </div>` : ''}
     </div>
-    ${cur.moon ? `
-    <hr class="weather-popup-divider">
-    <div class="weather-popup-moon">
-      <div class="moon-emoji">${cur.moon.emoji}</div>
-      <div class="moon-name">${cur.moon.name}</div>
-    </div>` : ''}
   `;
 
   overlay.style.display = 'flex';
