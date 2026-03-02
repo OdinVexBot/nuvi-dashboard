@@ -282,8 +282,8 @@ body {
   background: #1e222c;
   border: 1px solid #2a2f3a;
   border-radius: 16px;
-  padding: 18px 24px 16px;
-  max-width: 720px;
+  padding: 28px 32px 24px;
+  max-width: 800px;
   width: 100%;
   position: relative;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
@@ -315,13 +315,13 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 160px;
+  min-width: 200px;
   flex-shrink: 0;
 }
 
 .weather-popup-left .popup-icon {
-  width: 100px;
-  height: 100px;
+  width: 140px;
+  height: 140px;
   display: block;
 }
 
@@ -332,15 +332,15 @@ body {
 }
 
 .weather-popup-left .popup-temp {
-  font-size: 2.6rem;
+  font-size: 3.2rem;
   font-weight: 600;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .weather-popup-left .popup-desc {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   opacity: 0.85;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .weather-popup-right {
@@ -351,33 +351,33 @@ body {
 .weather-popup-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 8px;
+  gap: 10px;
 }
 
 .weather-popup-item {
   background: #262b38;
-  border-radius: 8px;
-  padding: 7px 6px;
+  border-radius: 10px;
+  padding: 12px 8px;
   text-align: center;
 }
 
 .weather-popup-item .popup-item-label {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   opacity: 0.6;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 
 .weather-popup-item .popup-item-value {
-  font-size: 1.15rem;
+  font-size: 1.4rem;
   font-weight: 500;
 }
 
 .weather-popup-footer {
   display: flex;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 10px;
+  margin-top: 14px;
   align-items: center;
   justify-content: center;
 }
@@ -398,11 +398,11 @@ body {
 }
 
 .weather-popup-moon-inline .moon-emoji {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 }
 
 .weather-popup-moon-inline .moon-name {
-  font-size: 1rem;
+  font-size: 1.15rem;
   opacity: 0.8;
 }
 
@@ -412,4 +412,54 @@ body {
 
 .weather-day.now-tile:active {
   background: #262b38;
+}
+
+/* Portrait popup (iPhone PWA) */
+@media (orientation: portrait) {
+  .weather-popup-card {
+    max-width: 100%;
+    padding: 20px 16px 16px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .weather-popup-body {
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .weather-popup-left {
+    min-width: unset;
+  }
+
+  .weather-popup-left .popup-icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .weather-popup-left .popup-temp {
+    font-size: 2.4rem;
+  }
+
+  .weather-popup-left .popup-desc {
+    font-size: 1.1rem;
+  }
+
+  .weather-popup-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .weather-popup-item {
+    padding: 10px 8px;
+  }
+
+  .weather-popup-item .popup-item-value {
+    font-size: 1.2rem;
+  }
+
+  .weather-popup-footer {
+    flex-wrap: wrap;
+  }
 }
