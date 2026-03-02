@@ -57,7 +57,18 @@ const weatherIconFiles = {
   snow:                 'snow',
   thunderstorm:         'thunderstorms-rain',
   fog:                  'fog',
-  mist:                 'mist'
+  mist:                 'mist',
+  'uv-index-1':         'uv-index-1',
+  'uv-index-2':         'uv-index-2',
+  'uv-index-3':         'uv-index-3',
+  'uv-index-4':         'uv-index-4',
+  'uv-index-5':         'uv-index-5',
+  'uv-index-6':         'uv-index-6',
+  'uv-index-7':         'uv-index-7',
+  'uv-index-8':         'uv-index-8',
+  'uv-index-9':         'uv-index-9',
+  'uv-index-10':        'uv-index-10',
+  'uv-index-11':        'uv-index-11'
 };
 
 // SVG icon cache — fetched once per file, IDs scoped per instance
@@ -137,14 +148,40 @@ function updateFromState(state) {
   const weatherGrid = document.getElementById('weather-grid');
   if (weatherGrid && state.weather && state.weather.days) {
     weatherGrid.innerHTML = '';
-    for (const day of state.weather.days) {
+    const cur = state.weather.current;
+    for (let i = 0; i < state.weather.days.length; i++) {
+      const day = state.weather.days[i];
       const div = document.createElement('div');
       div.className = 'weather-day';
+
+      // Today tile: use current conditions if available
+      let icon = day.icon;
+      let temp = `${day.high}° / ${day.low}°`;
+      let desc = day.desc;
+      let label = day.label;
+
+      if (i === 0 && cur && cur.icon) {
+        icon = cur.icon;
+        desc = cur.desc || desc;
+        // For sunny/clear current conditions with UV data, show UV icon
+        if (cur.isDay && cur.uvIndex != null && cur.uvIndex >= 1 &&
+            (cur.icon === 'sunny' || cur.icon === 'clear')) {
+          const uvLevel = Math.min(cur.uvIndex, 11);
+          icon = `uv-index-${uvLevel}`;
+          desc = `UV ${cur.uvIndex} · ${cur.desc}`;
+        }
+        // Show current temp alongside daily range
+        if (cur.temp != null) {
+          temp = `${cur.temp}° (${day.high}°/${day.low}°)`;
+        }
+        label = 'Now';
+      }
+
       div.innerHTML = `
-        <div class="weather-label">${day.label}</div>
-        <div class="weather-icon">${getWeatherIcon(day.icon)}</div>
-        <div class="weather-temp">${day.high}° / ${day.low}°</div>
-        <div class="weather-desc">${day.desc}</div>
+        <div class="weather-label">${label}</div>
+        <div class="weather-icon">${getWeatherIcon(icon)}</div>
+        <div class="weather-temp">${temp}</div>
+        <div class="weather-desc">${desc}</div>
       `;
       weatherGrid.appendChild(div);
     }
