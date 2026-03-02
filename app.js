@@ -356,13 +356,15 @@ setInterval(() => {
 }, 60 * 1000);
 
 // Full page reload every 5 minutes to pick up code changes
-// Uses Fully Kiosk API to clear WebView cache when available,
-// then navigates with a timestamp param to bypass any remaining cache
+// Uses Fully Kiosk API to clear WebView cache when available
 setTimeout(() => {
   if (typeof fully !== 'undefined' && fully.clearCache) {
     try { fully.clearCache(); } catch (e) {}
   }
-  const url = new URL(window.location.href);
-  url.searchParams.set('_t', Date.now());
-  window.location.href = url.toString();
+  // Strip any existing query params (e.g. leftover _t) and reload clean
+  if (window.location.search) {
+    window.location.href = window.location.origin + window.location.pathname;
+  } else {
+    window.location.reload(true);
+  }
 }, 5 * 60 * 1000);
